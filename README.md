@@ -1,5 +1,28 @@
 # Kubernetes-Cluster
-Create Your Own Kubernetes Cluster Using Ubuntu 20.04 On Vmvare Workstation
+## Setup Your Own Kubernetes Cluster Using Kubeadm On Ubuntu 20.04 
+
+In this project, the goal is to set up a Kubernetes cluster on a virtualized environment using VMware Workstation, with Ubuntu 20.04 as the operating system. Kubernetes is a powerful container orchestration platform that enables the management and deployment of containerized applications. VMware Workstation provides the virtualization infrastructure necessary to create and manage virtual machines for this purpose.
+
+## The process involves several key steps:
+
+**Environment Setup**: Ensure that you have VMware Workstation installed on your host machine and a copy of Ubuntu 20.04 available for installation.
+
+**Virtual Machine Creation**: Open VMware Workstation and create virtual machines that will serve as nodes in the Kubernetes cluster. These nodes will include a master node responsible for managing the cluster and one or more worker nodes for running applications.
+
+Ubuntu 20.04 Installation: Install Ubuntu 20.04 on each of the virtual machines created in the previous step. Configure network settings and update the operating system to the latest packages.
+
+Kubernetes Installation: Use the terminal within each virtual machine to install Kubernetes components. This includes installing the kubeadm, kubelet, and kubectl tools. Initiate the Kubernetes cluster on the master node using kubeadm.
+
+Cluster Configuration: Configure kubectl on the master node to communicate with the cluster. Set up networking, such as choosing a network plugin for pod communication.
+
+Worker Node Joining: Use the token provided by the kubeadm init command to join worker nodes to the cluster. This enables them to participate in workload execution.
+
+Testing and Deployment: Verify the health of the Kubernetes cluster using kubectl commands. Deploy sample applications to ensure that the cluster is functioning as expected.
+
+Cluster Management: Explore Kubernetes concepts such as pods, services, deployments, and namespaces to gain a deeper understanding of how the cluster operates.
+
+By the end of this project, you'll have successfully created a Kubernetes cluster on Ubuntu 20.04 using VMware Workstation. This will provide you with a platform to deploy, manage, and scale containerized applications with ease.
+
 # Steps to Install and Set Up Your Own Kubernetes Cluster
 
 ## Disable Firewall and Swap
@@ -12,6 +35,7 @@ sudo systemctl disable ufw
 ```bash
 sudo swapoff -a
 sudo nano /etc/fstab
+# Remove the Swap Partition line  
 ```
 ## Configure Kernel Modules
 We add necessary kernel modules to handle networking and container overlay. These modules help in communication between containers and manage networking efficiently.
@@ -50,10 +74,24 @@ done
 ```
 ## Install Containerd
 We install Containerd, a lightweight container runtime, which Kubernetes will use to manage containers.
+
 ## Set Up Repositories And Install Required Tools
 ```bash
 sudo apt-get update
 sudo apt-get install ca-certificates curl gnupg
+```
+## Add Docker’s official GPG key
+```bash
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+```
+## Use the following command to set up the repository
+```bash
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 ## Configure Docker Repository And Install Containerd
 ```bash
@@ -80,9 +118,19 @@ We install essential Kubernetes components - kubelet, kubeadm, and kubectl - whi
 ## Set Up Repositories And Install Required Tools
 ```bash
 sudo apt-get update
+# apt-transport-https may be a dummy package; if so, you can skip that package
 sudo apt-get install -y apt-transport-https ca-certificates curl
 ```
-## Configure Kubernetes Repository And Install Components
+## Download the public signing key for the Kubernetes package repositories
+```bash
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+```
+##  Add the appropriate Kubernetes apt repository:
+```bash
+# This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+## Update the apt package index, install kubelet, kubeadm and kubectl
 ```bash
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
@@ -94,6 +142,7 @@ We initialize the Kubernetes master node, which sets up the foundation for our c
 ## Initialize The Master Node With Provided Settings
 ```bash
 sudo kubeadm init --pod-network-cidr=10.32.0.0/12 --apiserver-advertise-address=machine_internal_ip
+# Don't Clear the Output It is Required Further
 ```
 ## Set Up The Configuration For Kubectl
 ```bash
@@ -124,7 +173,7 @@ kubectl edit ds weave-net -n kube-system
 - value: 10.32.0.0/12  #(--pod-network-cidr) value
 ```
 ## Join Worker Node
-## Finally, we use the command provided by the kubeadm init output to join worker nodes to the cluster.
+Finally, we use the command provided by the kubeadm init output to join worker nodes to the cluster.
 ```bash
 kubectl join ....
 ```
