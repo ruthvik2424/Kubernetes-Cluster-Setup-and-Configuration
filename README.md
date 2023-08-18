@@ -187,6 +187,11 @@ kubectl get pods -A
 ## If Not In Ready State Wait For Some Time And Let It Get Setep
 ## If It Is Ready State Go For Your First Deployment Using The File Provide In The Repository 
 ```bash
-git clone 
+git clone https://github.com/ruthvik2424/kubernetes-cluster.git
 kubectl apply -f first-deployment.yaml
 ```
+## Or
+```bash
+kubectl create deployment nginx-deploy --image=nginx
+```
+## Now You Have SuccessFully Deployed Your Own Kubernates Cluster.
