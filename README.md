@@ -9,19 +9,19 @@ In this project, the goal is to set up a Kubernetes cluster on a virtualized env
 
 **Virtual Machine Creation**: Open VMware Workstation and create virtual machines that will serve as nodes in the Kubernetes cluster. These nodes will include a master node responsible for managing the cluster and one or more worker nodes for running applications.
 
-Ubuntu 20.04 Installation: Install Ubuntu 20.04 on each of the virtual machines created in the previous step. Configure network settings and update the operating system to the latest packages.
+**Ubuntu 20.04 Installation**: Install Ubuntu 20.04 on each of the virtual machines created in the previous step. Configure network settings and update the operating system to the latest packages.
 
-Kubernetes Installation: Use the terminal within each virtual machine to install Kubernetes components. This includes installing the kubeadm, kubelet, and kubectl tools. Initiate the Kubernetes cluster on the master node using kubeadm.
+**Kubernetes Installation**: Use the terminal within each virtual machine to install Kubernetes components. This includes installing the kubeadm, kubelet, and kubectl tools. Initiate the Kubernetes cluster on the master node using kubeadm.
 
-Cluster Configuration: Configure kubectl on the master node to communicate with the cluster. Set up networking, such as choosing a network plugin for pod communication.
+**Cluster Configuration**: Configure kubectl on the master node to communicate with the cluster. Set up networking, such as choosing a network plugin for pod communication.
 
-Worker Node Joining: Use the token provided by the kubeadm init command to join worker nodes to the cluster. This enables them to participate in workload execution.
+**Worker Node Joining**: Use the token provided by the kubeadm init command to join worker nodes to the cluster. This enables them to participate in workload execution.
 
-Testing and Deployment: Verify the health of the Kubernetes cluster using kubectl commands. Deploy sample applications to ensure that the cluster is functioning as expected.
+**Testing and Deployment**: Verify the health of the Kubernetes cluster using kubectl commands. Deploy sample applications to ensure that the cluster is functioning as expected.
 
-Cluster Management: Explore Kubernetes concepts such as pods, services, deployments, and namespaces to gain a deeper understanding of how the cluster operates.
+**Cluster Management**: Explore Kubernetes concepts such as pods, services, deployments, and namespaces to gain a deeper understanding of how the cluster operates.
 
-By the end of this project, you'll have successfully created a Kubernetes cluster on Ubuntu 20.04 using VMware Workstation. This will provide you with a platform to deploy, manage, and scale containerized applications with ease.
+**By the end of this project, you'll have successfully created a Kubernetes cluster on Ubuntu 20.04 using VMware Workstation. This will provide you with a platform to deploy, manage, and scale containerized applications with ease.**
 
 # Steps to Install and Set Up Your Own Kubernetes Cluster
 
@@ -31,7 +31,7 @@ We stop the firewall service and prevent it from starting at boot time to ensure
 sudo systemctl stop ufw
 sudo systemctl disable ufw
 ```
-## We also disable the swap partition to create a smoother experience for Kubernetes.
+We also disable the swap partition to create a smoother experience for Kubernetes.
 ```bash
 sudo swapoff -a
 sudo nano /etc/fstab
@@ -143,6 +143,7 @@ We initialize the Kubernetes master node, which sets up the foundation for our c
 ```bash
 sudo kubeadm init --pod-network-cidr=10.32.0.0/12 --apiserver-advertise-address=machine_internal_ip
 # Don't Clear the Output It is Required Further
+# Change the machine_internal_ip with the actual ip address of the Machine
 ```
 ## Set Up The Configuration For Kubectl
 ```bash
@@ -178,3 +179,14 @@ Finally, we use the command provided by the kubeadm init output to join worker n
 kubectl join ....
 ```
 ## Use the provided command from the Kubeadm init command output to join worker nodes to the cluster.
+## Check That The Worker Node Has Join SuccessFully And Are In Ready State Or Not And All Pods Are In Running State
+```bash
+kubectl get nodes
+kubectl get pods -A
+```
+## If Not In Ready State Wait For Some Time And Let It Get Setep
+## If It Is Ready State Go For Your First Deployment Using The File Provide In The Repository 
+```bash
+git clone 
+kubectl apply -f first-deployment.yaml
+```
