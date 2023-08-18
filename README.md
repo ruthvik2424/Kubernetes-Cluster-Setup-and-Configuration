@@ -93,7 +93,7 @@ echo \
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
-## Configure Docker Repository And Install Containerd
+## Update The Repository And Install Containerd
 ```bash
 sudo apt-get update
 sudo apt-get install containerd.io
@@ -179,12 +179,14 @@ Finally, we use the command provided by the kubeadm init output to join worker n
 kubectl join ....
 ```
 ## Use the provided command from the Kubeadm init command output to join worker nodes to the cluster.
+
 ## Check That The Worker Node Has Join SuccessFully And Are In Ready State Or Not And All Pods Are In Running State
 ```bash
 kubectl get nodes
 kubectl get pods -A
 ```
-## If Not In Ready State Wait For Some Time And Let It Get Setep
+## If Not In Ready State Wait For Some Time And Let It Get Setup
+
 ## If It Is Ready State Go For Your First Deployment Using The File Provide In The Repository 
 ```bash
 git clone https://github.com/ruthvik2424/kubernetes-cluster.git
