@@ -149,7 +149,7 @@ sudo kubeadm init --pod-network-cidr=10.32.0.0/12 --apiserver-advertise-address=
 ```bash
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown \$(id -u):\$(id -g) $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 ## Set Up Pod Networking
 We deploy a network plugin (Weave) to enable communication between pods in our cluster.
