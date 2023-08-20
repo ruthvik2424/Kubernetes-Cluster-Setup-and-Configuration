@@ -23,6 +23,11 @@ In this project, the goal is to set up a Kubernetes cluster on a virtualized env
 
 **By the end of this project, you'll have successfully created a Kubernetes cluster on Ubuntu 20.04 using VMware Workstation. This will provide you with a platform to deploy, manage, and scale containerized applications with ease.**
 
+## Prerequisites
+## Before you start, ensure you have the following:
+Two Ubuntu 20.04 Vm's Up and Running one for Master Node one for Worker Node.
+Good Internet Connection For Downloading Packages and Updates.
+
 # Steps to Install and Set Up Your Own Kubernetes Cluster
 
 ## Disable Firewall and Swap
